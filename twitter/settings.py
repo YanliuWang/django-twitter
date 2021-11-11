@@ -40,7 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # third party
-    'rest_framework'
+    # notifying after installing using pip
+    'rest_framework',
+
+    # project apps
+    'accounts',
 ]
 
 

@@ -16,12 +16,17 @@ from django.contrib.auth import (
 
 class UserViewSet(viewsets.ModelViewSet):
     """
+    UserViewSet means we visit User object
     API endpoint that allows users to be viewed or edited.
     ModelViewSet 可以增删查改操作
     """
+
+    # using User model to do query
     queryset = User.objects.all().order_by('-date_joined')
+    # Object format displayed by this serializer
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # check whether the used logout in or not
+    permission_classes = (permissions.IsAuthenticated, )
 
 
 class AccountViewSet(viewsets.ViewSet):
