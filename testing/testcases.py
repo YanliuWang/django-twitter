@@ -7,7 +7,9 @@ from tweets.models import Tweet
 # 可以获取这个类的两个方法
 class TestCase(DjangoTestCase):
 
-    def create_user(self, username, email, password=None):
+    def create_user(self, username, email=None, password=None):
+        if email is None:
+            email = '{}@jiuzhang.com'.format(username)
         if password is None:
             password = 'generic password'
         # 不能写成 User.objects.create()
