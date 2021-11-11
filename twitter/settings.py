@@ -44,10 +44,13 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # project apps
+    # 创建 model 执行数据迁移之前
+    # 必须要在这里添加信息
     'accounts',
     'tweets',
     'friendships',
     'newsfeeds',
+    'comments',
 ]
 
 
