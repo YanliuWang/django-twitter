@@ -18,7 +18,11 @@ class NewsFeedViewSet(viewsets.GenericViewSet):
 
     # 获取新鲜事列表
     def list(self, request):
-        serializer = NewsFeedSerializer(self.get_queryset(), many=True)
+        serializer = NewsFeedSerializer(
+            self.get_queryset(),
+            context={'request': request},
+            many=True,
+        )
         return Response({
             'newsfeeds': serializer.data,
         }, status=status.HTTP_200_OK)
