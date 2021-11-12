@@ -3,8 +3,14 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from newsfeeds.services import NewsFeedService
-from tweets.api.serializers import TweetSerializer, TweetCreateSerializer
+from tweets.api.serializers import (
+    TweetSerializer,
+    TweetCreateSerializer,
+    TweetSerializerWithComments,
+)
+
 from tweets.models import Tweet
+from utils.decorators import required_params
 
 
 class TweetViewSet(viewsets.GenericViewSet,
@@ -17,20 +23,19 @@ class TweetViewSet(viewsets.GenericViewSet,
     serializer_class = TweetCreateSerializer
 
     def get_permissions(self):
-        if self.action == 'list':
+        if self.action in ['list', 'retrieve']:
             return [AllowAny()]
         return [IsAuthenticated()]
 
-    # 获取某个用户的所有推文
-    def list(self, request, *args, **kwargs):
-        """
-        重载 list 方法，不列出所有 tweets，必须要求指定 user_id 作为筛选条件
-        """
-        # 需要 user_id 参数
-        # user_id 以 url 查询参数的形式出现在 url? 后面
-        if 'user_id' not in request.query_params:
-            return Response('missing user_id', status=400)
+    def retrieve(self, request, *args, **kwargs):
+        # <HOMEWORK 1> 通过某个 query 参数 with_all_comments 来决定是否需要带上所有 comments
+        # <HOMEWORK 2> 通过某个 query 参数 with_preview_comments 来决定是否需要带上前三条 comments
+        tweet = self.get_object()
+        return Response(TweetSerializerWithComments(tweet).data)
 
+    # 获取某个用户的所有推文
+    @required_params(params=['user_id'])
+    def list(self, request, *args, **kwargs):
         # 这句查询会被翻译为
         # select * from twitter_tweets
         # where user_id = xxx
