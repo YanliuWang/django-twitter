@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # notifying after installing using pip
     'rest_framework',
     'django_filters',
+    'notifications',
 
     # project apps
     # 创建 model 执行数据迁移之前
